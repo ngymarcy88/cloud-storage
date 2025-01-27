@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  title: Cloud Storage API
+  description: API for managing files and folders in a cloud storage system.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Files
+    description: File management
+  - name: Folders
+    description: Folder management
+paths:
+  /files:
+    post:
+      tags:
+        - Files
+      summary: Upload a file
+      description: Uploads a file to cloud storage and saves the metadata.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                folderId:
+                  type: string
+                  description: The folder ID where the file will be uploaded
+      responses:
+        '201':
+          description: File uploaded successfully
+        '400':
+          description: Invalid request
+  /files/{fileId}:
+    get:
+      tags:
+        - Files
+      summary: Download a file
+      description: Returns the file based on its unique identifier.
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          description: The unique identifier of the file
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File successfully downloaded
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File not found
+    delete:
+      tags:
+        - Files
+      summary: Delete a file
+      description: Deletes a file based on its unique identifier.
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          description: The unique identifier of the file
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File deleted successfully
+        '404':
+          description: File not found
+  /folders:
+    post:
+      tags:
+        - Folders
+      summary: Create a new folder
+      description: Creates a new folder with a specified name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the folder
+                parentId:
+                  type: string
+                  description: The parent folder ID (if applicable)
+      responses:
+        '201':
+          description: Folder created successfully
+        '400':
+          description: Invalid request
+  /folders/{folderId}:
+    get:
+      tags:
+        - Folders
+      summary: Get contents of a folder
+      description: Returns the contents of a specified folder (files and subfolders).
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          description: The unique identifier of the folder
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Folder contents retrieved successfully
+        '404':
+          description: Folder not found
+    delete:
+      tags:
+        - Folders
+      summary: Delete a folder
+      description: Deletes a folder based on its unique identifier.
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          description: The unique identifier of the folder
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Folder deleted successfully
+        '404':
+          description: Folder not found
