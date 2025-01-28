@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');
+'use strict';
+
+import mongoose from 'mongoose';
 
 const folderSchema = new mongoose.Schema({
   name: {
@@ -17,4 +19,4 @@ const folderSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Folder', folderSchema);
+export const UserModel = mongoose.model('Folder', folderSchema);

@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');
+'use strict';
+
+import mongoose from 'mongoose';
 
 const fileSchema = new mongoose.Schema({
     filename: {
@@ -29,4 +31,4 @@ const fileSchema = new mongoose.Schema({
     },
   });
 
-module.exports = mongoose.model('File', fileSchema);
+export const UserModel = mongoose.model('File', fileSchema);
