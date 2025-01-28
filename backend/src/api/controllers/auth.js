@@ -1,17 +1,25 @@
 'use strict';
 
-const express = require('express');
-const axios = require('axios')
-const router = express.Router();
-const admin = require('../helpers/firebase');
+import axios from 'axios';
+import admin from '../helpers/firebase.js'
+import { UserModel } from '../models/userModel.js';
 
-export const regiester = async (req,res) => {
-  const { email, password } = req.body;
+export const register = async (req,res) => {
+  const { username, email, password } = req.body;
   try {
     const userRecord = await admin.auth().createUser({
       email,
       password,
     });
+
+    // todo hibakezelés
+    const newUser = new UserModel({
+      username,
+      email,
+      firebaseUid: userRecord.uid,
+    });
+
+    await newUser.save();
 
     res.status(201).json({
       message: 'Felhasználó sikeresen regisztrálva!',
@@ -56,9 +64,4 @@ export const login = async(req,res) => {
     console.log(error);
     res.status(400);
   }
-};
-
-module.exports = {
-  regiester,
-  login
 };

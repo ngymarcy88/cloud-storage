@@ -1,8 +1,14 @@
-const admin = require('firebase-admin');
-const serviceAccount = require('../../../serviceAccountKey.json');
+'use strict';
+
+import admin from 'firebase-admin';
+//import serviceAccount from '../../../serviceAccountKey.json'
+import fs from 'fs';
+
+const data = fs.readFileSync('./serviceAccountKey.json', 'utf-8');
+const jsonData = JSON.parse(data);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(jsonData),
 });
 
-module.exports = admin;
+export default admin;
